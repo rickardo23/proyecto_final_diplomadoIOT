@@ -49,7 +49,7 @@
  * Local vars
  ******************************************************************************/
 
-uint8_t mensaje_de_texto[]="Hola desde EC25";
+uint8_t mensaje_de_texto[]="Hola desde EC25_dtk";
 
 /*******************************************************************************
  * Private Source Code
