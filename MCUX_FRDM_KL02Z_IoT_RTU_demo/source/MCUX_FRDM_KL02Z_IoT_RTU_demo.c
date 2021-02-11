@@ -1,3 +1,4 @@
+
 /*! @file : MCUX_FRDM_KL02Z_IoT_RTU_demo.c
  * @author  Ernesto Andres Rincon Cruz
  * @version 1.0.0
@@ -33,9 +34,27 @@
 #include "sdk_mdlw_leds.h"
 #include "sdk_pph_mma8451Q.h"
 #include "sdk_pph_ec25au.h"
+
+#include "bme280.h"
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+#define  BME280_I2C_config        0xF5   //registro para configurar el BME280
+#define  BME280_I2C_ID		      0xD0   //registro para identificar al sensor, El valor de lectura es 0x60
+#define  BME280_I2C_
+
+
+#define BME280_temp_lsb         0xFB   //registros para leer los datos (8 bits) de la temperatura de MSB y LSB.
+#define BME280_temp_msb         0xFA
+//#define BME280_temp_xlsb        0xFC
+#define BME280_hum_lsb          0xFE    //registros para leer los datos (8 bits) de la Humedad de MSB y LSB.
+#define BME280_hum_msb          0xFD
+//#define BME280_press_xlsb       0xF9
+#define BME280_press_lsb        0xF8    //registros para leer los datos (8 bits) de  la presion de MSB y LSB.
+#define BME280_press_msb        0xF7
+
+
 
 /*******************************************************************************
  * Private Prototypes
@@ -48,14 +67,22 @@
 /*******************************************************************************
  * Local vars
  ******************************************************************************/
+uint8_t mensaje_de_texto[]="Hola desde EC25_dtk_&_jmp";
 
-uint8_t mensaje_de_texto[]="Hola desde EC25_dtk";
 
 /*******************************************************************************
  * Private Source Code
  ******************************************************************************/
 void waytTime(void) {
+
 	uint32_t tiempo = 0xFFFFF;
+	status_t status;
+	uint8_t nuevo_byte_uart;
+	uint8_t	nuevo_dato_i2c;
+	uint16_t Registro_i2c0_MSB;    //variable para guardar la parte mas significativa
+	uint16_t Registro_i2c0_LSB;    //variable para guardar la parte menos significativa
+	int16_t Dato_Final ;           //variable para guardar la union de MSB y LSB
+
 	do {
 		tiempo--;
 	} while (tiempo != 0x0000);
