@@ -1,4 +1,4 @@
-/**
+/**!
 * Copyright (c) 2020 Bosch Sensortec GmbH. All rights reserved.
 *
 * BSD-3-Clause
@@ -39,7 +39,7 @@
 /*! @file bme280.c
  * @brief Sensor driver for BME280 sensor
  */
-#include "bme280.h"
+#include "sdk_pph_bme280.h"
 
 /**\name Internal macros */
 /* To identify osr settings selected by user */

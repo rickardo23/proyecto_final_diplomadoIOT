@@ -35,7 +35,7 @@
 #include "sdk_pph_mma8451Q.h"
 #include "sdk_pph_ec25au.h"
 
-#include "bme280.h"
+#include "sdk_pph_bme280.h"
 
 /*******************************************************************************
  * Definitions
@@ -76,6 +76,7 @@ uint8_t mensaje_de_texto[]="Hola desde EC25_dtk_&_jmp";
 void waytTime(void) {
 
 	uint32_t tiempo = 0xFFFFF;
+
 	status_t status;
 	uint8_t nuevo_byte_uart;
 	uint8_t	nuevo_dato_i2c;
