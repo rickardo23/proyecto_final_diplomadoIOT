@@ -43,7 +43,7 @@ void ec25BorrarBufferRX(void);
  ******************************************************************************/
 uint8_t ec25_buffer_tx[EC25_BYTES_EN_BUFFER];		//almacena los datos a enviar al modem
 uint8_t ec25_buffer_rx[EC25_BYTES_EN_BUFFER];		//almacena las datos que provienen del modem
-uint8_t ec25_index_buffer_rx = 0;				//apuntador de buffer de datos
+uint8_t ec25_index_buffer_rx = 0;				    //apuntador de buffer de datos
 
 estado_fsm_t ec25_fsm;	//almacena estado actual de la maquina de estados modem EC25
 
@@ -58,7 +58,7 @@ const char *ec25_comandos_at[] = {
 	"AT+CPIN?",		//consulta estado de la simcard
 	"AT+CREG?",		//consulta estado de la red celular y tecnología usada en red celular
 	"AT+CMGF=1",	//asigna modo texto para enviar mensajes
-	"AT+CMGS=\"3003564960\"",//envia mensaje de texto a numero definido
+	"AT+CMGS=\"3007632985\"",//envia mensaje de texto a numero definido
 	"Mensaje", 		//MENSAJE & CTRL+Z
 	"AT+CSQ",		//consulta calidad de la señal RSSI
 	};
@@ -115,7 +115,7 @@ void ec25EnviarComandoAT(uint8_t comando){
 //------------------------------------
 status_t ec25ProcesarRespuestaAT(uint8_t comando){
 	status_t resultado_procesamiento;	//variable que almacenará el resultado del procesamiento
-	uint8_t *puntero_ok=0;	//variable temporal que será usada para buscar respuesta
+	uint8_t *puntero_ok=0;           	//variable temporal que será usada para buscar respuesta
 
 	switch(ec25_fsm.anterior){
 	case kFSM_ENVIANDO_AT:
@@ -238,26 +238,27 @@ status_t ec25ProcesarRespuestaAT(uint8_t comando){
  * Public Source Code
  ******************************************************************************/
 status_t ec25Inicializacion(void){
-	ec25_fsm.anterior=kFSM_INICIO;	//reinicia estado anterios
-	ec25_fsm.actual=kFSM_INICIO;	//reinicia estado actual
-	ec25_timeout=0;	//borra contador de tiempo
-	ec25BorrarBufferTX();	//borrar buffer de transmisión
-	ec25BorrarBufferRX();	//borra buffer de recepción
+	ec25_fsm.anterior=kFSM_INICIO;                        	//reinicia estado anterios
+	ec25_fsm.actual=kFSM_INICIO;	                        //reinicia estado actual
+	ec25_timeout=0;                                      	//borra contador de tiempo
+	ec25BorrarBufferTX();	                                //borrar buffer de transmisión
+	ec25BorrarBufferRX();	                                //borra buffer de recepción
 	ec25_comando_en_ejecucion=kORDEN_NO_HAY_EN_EJECUCION;	//Borra orden en ejecucion actual
 	return(kStatus_Success);
 }
 //------------------------------------
 status_t ec25EnviarMensajeDeTexto(uint8_t *mensaje, uint8_t size_mensaje ){
-	memcpy(&ec25_buffer_tx[0],mensaje, size_mensaje);	//copia mensaje a enviar en buffer TX del EC25
+	memcpy(&ec25_buffer_tx[0],mensaje, size_mensaje);	        //copia mensaje a enviar en buffer TX del EC25
 	ec25_comando_en_ejecucion=kORDEN_ENVIAR_MENSAJE_DE_TEXTO;	//almacena cual es la orden que debe cumplir la FSM
-	ec25_fsm.actual=kFSM_ENVIANDO_AT;	//inicia la FSM a rtabajar desde el primer comando AT
+	ec25_fsm.actual=kFSM_ENVIANDO_AT;	                        //inicia la FSM a tabajar desde el primer comando AT
 	return(kStatus_Success);
 }
 //------------------------------------
 uint8_t ec25Polling(void){
 	status_t resultado;
 	uint8_t nuevo_byte_uart;
-	uint8_t *puntero_ok=0;	//variable temporal que será usada para buscar respuesta
+	uint8_t *puntero_ok=0;	         //variable temporal que será usada para buscar respuesta
+
 	switch (ec25_fsm.actual) {
 	case kFSM_INICIO:
 		//En este estado no hace nada y está a la espera de iniciar una nueva orden
