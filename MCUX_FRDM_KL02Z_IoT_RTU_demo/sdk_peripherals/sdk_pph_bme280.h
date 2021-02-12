@@ -158,13 +158,13 @@ int8_t bme280_get_regs(uint8_t reg_addr, uint8_t *reg_data, uint16_t len, struct
  * desired settings. User can do OR operation of these macros for configuring
  * multiple settings.
  *
- * Macros         |   Functionality
+ * Macros                 |   Functionality
  * -----------------------|----------------------------------------------
- * BME280_OSR_PRESS_SEL    |   To set pressure oversampling.
- * BME280_OSR_TEMP_SEL     |   To set temperature oversampling.
- * BME280_OSR_HUM_SEL    |   To set humidity oversampling.
- * BME280_FILTER_SEL     |   To set filter setting.
- * BME280_STANDBY_SEL  |   To set standby duration setting.
+ * BME280_OSR_PRESS_SEL   |   To set pressure oversampling.
+ * BME280_OSR_TEMP_SEL    |   To set temperature oversampling.
+ * BME280_OSR_HUM_SEL     |   To set humidity oversampling.
+ * BME280_FILTER_SEL      |   To set filter setting.
+ * BME280_STANDBY_SEL     |   To set standby duration setting.
  *
  * @return Result of API execution status
  *
@@ -238,7 +238,7 @@ int8_t bme280_set_sensor_mode(uint8_t sensor_mode, struct bme280_dev *dev);
  * @param[in] dev : Structure instance of bme280_dev.
  * @param[out] sensor_mode : Pointer variable to store the power mode.
  *
- *   sensor_mode            |   Macros
+ *   sensor_mode        |   Macros
  * ---------------------|-------------------
  *     0                | BME280_SLEEP_MODE
  *     1                | BME280_FORCED_MODE

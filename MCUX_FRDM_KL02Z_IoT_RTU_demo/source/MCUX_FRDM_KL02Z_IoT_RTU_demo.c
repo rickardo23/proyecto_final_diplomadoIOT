@@ -16,6 +16,14 @@
  *
  *
  */
+
+/*
+ *  bme280_defs.h: este archivo de encabezado tiene las constantes, macros y declaraciones de tipos de datos.
+ *  bme280.h: este archivo de encabezado contiene las declaraciones de las API del controlador del sensor.
+ *  bme280.c: este archivo fuente contiene las definiciones de las API del controlador del sensor.
+ */
+
+
 /*******************************************************************************
  * Includes
  ******************************************************************************/
@@ -34,7 +42,6 @@
 #include "sdk_mdlw_leds.h"
 #include "sdk_pph_mma8451Q.h"
 #include "sdk_pph_ec25au.h"
-
 #include "sdk_pph_bme280.h"
 
 /*******************************************************************************
@@ -42,8 +49,6 @@
  ******************************************************************************/
 #define  BME280_I2C_config        0xF5   //registro para configurar el BME280
 #define  BME280_I2C_ID		      0xD0   //registro para identificar al sensor, El valor de lectura es 0x60
-#define  BME280_I2C_
-
 
 #define BME280_temp_lsb         0xFB   //registros para leer los datos (8 bits) de la temperatura de MSB y LSB.
 #define BME280_temp_msb         0xFA
@@ -69,6 +74,12 @@
  ******************************************************************************/
 uint8_t mensaje_de_texto[]="Hola desde EC25_dtk_&_jmp";
 
+/*
+ * variables que almacenan los datos de cada uno respectivamente
+ * pressure, temperature, humidity
+ */
+
+
 
 /*******************************************************************************
  * Private Source Code
@@ -76,14 +87,6 @@ uint8_t mensaje_de_texto[]="Hola desde EC25_dtk_&_jmp";
 void waytTime(void) {
 
 	uint32_t tiempo = 0xFFFFF;
-
-	status_t status;
-	uint8_t nuevo_byte_uart;
-	uint8_t	nuevo_dato_i2c;
-	uint16_t Registro_i2c0_MSB;    //variable para guardar la parte mas significativa
-	uint16_t Registro_i2c0_LSB;    //variable para guardar la parte menos significativa
-	int16_t Dato_Final ;           //variable para guardar la union de MSB y LSB
-
 	do {
 		tiempo--;
 	} while (tiempo != 0x0000);
@@ -94,8 +97,18 @@ void waytTime(void) {
  * @brief   Application entry point.
  */
 int main(void) {
+
 	uint8_t estado_actual_ec25;
 
+     //por darle uso
+	//status_t status;
+	//uint8_t nuevo_byte_uart;
+	//uint8_t	nuevo_dato_i2c;
+	//uint16_t Registro_i2c0_MSB;    //variable para guardar la parte mas significativa
+    //uint16_t Registro_i2c0_LSB;    //variable para guardar la parte menos significativa
+    //int16_t Dato_Final ;           //variable para guardar la union de MSB y LSB
+
+    //inicializa el hardware de la tarjeta
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
@@ -112,10 +125,12 @@ int main(void) {
     	return 0 ;
     }
 
+    /*
     //LLamado a funcion que indeitifica acelerometro MMA8451Q
     if (mma8451QWhoAmI() == kStatus_Success){
     	(void)mma8451QInit();	//inicializa acelerometro MMA8451Q
     }
+    */
 
     //inicializa todas las funciones necesarias para trabajar con el modem EC25
     ec25Inicializacion();
@@ -124,11 +139,11 @@ int main(void) {
 	//Ciclo infinito encendiendo y apagando led verde
 	//inicia el SUPERLOOP
     while(1) {
+
     	waytTime();		//base de tiempo fija aproximadamente 200ms
 
 		estado_actual_ec25 = ec25Polling();	//actualiza maquina de estados encargada de avanzar en el proceso interno del MODEM
 											//retorna el estado actual de la FSM
-
     	switch(estado_actual_ec25){
     	case kFSM_RESULTADO_ERROR:
     		toggleLedRojo();
