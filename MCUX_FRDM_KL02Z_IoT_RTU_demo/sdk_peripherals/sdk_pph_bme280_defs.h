@@ -48,6 +48,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #endif
+#include "sdk_hal_i2c0.h" //incluye libreria del I2C
 
 /********************************************************/
 /*! @name       Common macros               */
@@ -115,7 +116,7 @@
 #endif
 
 /**\name I2C addresses */
-#define BME280_I2C_ADDR_PRIM                      UINT8_C(0x76)
+#define BME280_I2C_ADDR_PRIM                      UINT8_C(0x76) // direccion del BME280
 #define BME280_I2C_ADDR_SEC                       UINT8_C(0x77)
 
 /**\name BME280 chip identifier */

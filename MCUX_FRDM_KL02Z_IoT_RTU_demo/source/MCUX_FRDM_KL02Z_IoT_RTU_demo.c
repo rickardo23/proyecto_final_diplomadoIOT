@@ -128,9 +128,14 @@ int main(void) {
     /*
     //LLamado a funcion que indeitifica acelerometro MMA8451Q
     if (mma8451QWhoAmI() == kStatus_Success){
-    	(void)mma8451QInit();	//inicializa acelerometro MMA8451Q
+    	(void)mma8451QInit();	             //inicializa acelerometro MMA8451Q
     }
     */
+
+    //LLamado a funcion que indeitifica al sensor BME280
+        if (BME280WhoAmI() == kStatus_Success){ // falta identificar donde esta whoAmI para el sensor
+        	(void)bme280_init();	            //inicializa el sensor BME280
+        }
 
     //inicializa todas las funciones necesarias para trabajar con el modem EC25
     ec25Inicializacion();
