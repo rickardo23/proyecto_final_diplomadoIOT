@@ -21,8 +21,12 @@
  *  bme280_defs.h: este archivo de encabezado tiene las constantes, macros y declaraciones de tipos de datos.
  *  bme280.h: este archivo de encabezado contiene las declaraciones de las API del controlador del sensor.
  *  bme280.c: este archivo fuente contiene las definiciones de las API del controlador del sensor.
+ *
+    En caso de la macro "BME280 FLOAT ENABLE" habilitada, las salidas son dobles y las unidades son
+      -° C para temperatura
+      -% humedad relativa
+      -Pa Pascal para presión
  */
-
 
 /*******************************************************************************
  * Includes
@@ -38,6 +42,8 @@
 #include "sdk_hal_uart0.h"
 #include "sdk_hal_gpio.h"
 #include "sdk_hal_i2c0.h"
+#include "sdk_hal_i2c1.h"
+#include "sdk_hal_adc.h"
 
 #include "sdk_mdlw_leds.h"
 #include "sdk_pph_mma8451Q.h"
@@ -74,11 +80,12 @@
  ******************************************************************************/
 uint8_t mensaje_de_texto[]="Hola desde EC25_dtk_&_jmp";
 
+
+//spintf
 /*
  * variables que almacenan los datos de cada uno respectivamente
  * pressure, temperature, humidity
  */
-
 
 
 /*******************************************************************************
@@ -133,9 +140,21 @@ int main(void) {
     */
 
     //LLamado a funcion que indeitifica al sensor BME280
-        if (BME280WhoAmI() == kStatus_Success){ // falta identificar donde esta whoAmI para el sensor
-        	(void)bme280_init();	            //inicializa el sensor BME280
-        }
+   //     if (BME280WhoAmI() == kStatus_Success){ // falta identificar donde esta whoAmI para el sensor
+     //   	(void)bme280_init();	            //inicializa el sensor BME280
+       // }
+
+    struct bme280_dev dev;
+    int8_t rslt = BME280_OK;
+    uint8_t dev_addr = BME280_I2C_ADDR_PRIM;
+
+    dev.intf_ptr = &dev_addr;
+    dev.intf = BME280_I2C_INTF;
+    dev.read = user_i2c_read;
+    dev.write = user_i2c_write;
+    dev.delay_ms = user_delay_ms;
+
+    rslt = bme280_init(&dev);
 
     //inicializa todas las funciones necesarias para trabajar con el modem EC25
     ec25Inicializacion();
