@@ -48,7 +48,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #endif
-#include "sdk_hal_i2c0.h" //incluye libreria del I2C
+#include "sdk_hal_i2c1.h" //incluye libreria del I2C1
 
 /********************************************************/
 /*! @name       Common macros               */
@@ -86,7 +86,7 @@
 
 /********************************************************/
 
-#ifndef BME280_64BIT_ENABLE /*< Check if 64-bit integer (using BME280_64BIT_ENABLE) is enabled */
+//#ifndef BME280_64BIT_ENABLE /*< Check if 64-bit integer (using BME280_64BIT_ENABLE) is enabled */
 #ifndef BME280_32BIT_ENABLE /*< Check if 32-bit integer (using BME280_32BIT_ENABLE) is enabled */
 #ifndef BME280_FLOAT_ENABLE /*< If any of the integer data types not enabled then enable BME280_FLOAT_ENABLE */
 #define BME280_FLOAT_ENABLE
@@ -120,7 +120,7 @@
 #define BME280_I2C_ADDR_SEC                       UINT8_C(0x77)
 
 /**\name BME280 chip identifier */
-#define BME280_CHIP_ID                            UINT8_C(0x60)
+#define BME280_CHIP_ID                            UINT8_C(0x60) //direccion del ID
 
 /**\name Register Address */
 #define BME280_CHIP_ID_ADDR                       UINT8_C(0xD0)
@@ -245,7 +245,7 @@
 /*!
  * @brief Interface selection Enums
  */
-enum bme280_intf {
+enum bme280_intf {     //selecciona el modo de interface I2C o SPI
     /*< SPI interface */
     BME280_SPI_INTF,
     /*< I2C interface */

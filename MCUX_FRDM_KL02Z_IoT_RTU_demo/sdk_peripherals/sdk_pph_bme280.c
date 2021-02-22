@@ -40,7 +40,7 @@
  * @brief Sensor driver for BME280 sensor
  */
 #include "sdk_pph_bme280.h"
-#include "sdk_hal_i2c0.h" //incluye libreria del I2C
+#include "sdk_hal_i2c1.h" //incluye libreria del I2C1
 
 /**\name Internal macros */
 /* To identify osr settings selected by user */
