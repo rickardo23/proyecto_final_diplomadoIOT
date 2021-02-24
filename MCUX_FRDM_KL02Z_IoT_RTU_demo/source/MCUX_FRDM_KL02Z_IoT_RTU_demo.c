@@ -65,8 +65,6 @@
 #define BME280_press_lsb        0xF8    //registros para leer los datos (8 bits) de  la presion de MSB y LSB.
 #define BME280_press_msb        0xF7
 
-
-
 /*******************************************************************************
  * Private Prototypes
  ******************************************************************************/
@@ -78,10 +76,10 @@
 /*******************************************************************************
  * Local vars
  ******************************************************************************/
-uint8_t mensaje_de_texto[]="Hola desde EC25 dtk & jmp";
+//uint8_t mensaje_de_texto[]="Hola desde EC25 dtk & jmp";
 
 
-//spintf
+//sprintf
 /*
  * variables que almacenan los datos de cada uno respectivamente
  * pressure, temperature, humidity
@@ -105,32 +103,66 @@ void waytTime(void) {
  */
 int main(void) {
 
+    uint8_t ec25_mensaje_de_texto[]="Hola desde EC25";
 	uint8_t estado_actual_ec25;
+    uint8_t ec25_detectado=0;
 
-     //por darle uso
-	//status_t status;
-	//uint8_t nuevo_byte_uart;
-	//uint8_t	nuevo_dato_i2c;
-	//uint16_t Registro_i2c0_MSB;    //variable para guardar la parte mas significativa
-    //uint16_t Registro_i2c0_LSB;    //variable para guardar la parte menos significativa
-    //int16_t Dato_Final ;           //variable para guardar la union de MSB y LSB
+	bme280_data_t bme280_datos;
+	uint8_t bme280_detectado=0;
+	uint8_t bme280_base_de_tiempo=0;
 
+    
     //inicializa el hardware de la tarjeta
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
+
 #ifndef BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL
     BOARD_InitDebugConsole();
 #endif
+
     //inicializa puerto UART0 y solo avanza si es exitoso el proceso
+    printf("Inicializa UART0:");
     if(uart0Inicializar(115200)!=kStatus_Success){	//115200bps
     	return 0 ;
     }
+    printf("OK\r\n");
 
     //inicializa puerto I2C0 y solo avanza si es exitoso el proceso
+    printf("Inicializa I2C0:");
     if(i2c0MasterInit(100000)!=kStatus_Success){	//100kbps
     	return 0 ;
     }
+    printf("OK\r\n");
+
+ 
+    //inicializa puerto I2C1 y solo avanza si es exitoso el proceso
+    printf("Inicializa I0C1:");
+    if(i2c1MasterInit(100000)!=kStatus_Success){	//100kbps
+    	printf("Error");
+    	return 0 ;
+    }
+    printf("OK\r\n");
+
+#if HABILITAR_SENSOR_BME280
+    printf("Detectando BME280:");
+    //LLamado a funcion que identifica sensor BME280
+    if (bme280WhoAmI() == kStatus_Success){
+    	printf("OK\r\n");
+    	(void)bme280Init();	//inicializa sensor bme280
+    	bme280_detectado=1;	//activa bandera que indica (SI HAY BME280)
+    }
+#endif
+
+#if HABILITAR_MODEM_EC25
+    //Inicializa todas las funciones necesarias para trabajar con el modem EC25
+    printf("Inicializa modem EC25\r\n");
+    ec25Inicializacion();
+
+    //Configura FSM de modem para enviar mensaje de texto
+    printf("Enviando mensaje de texto por modem EC25\r\n");
+    ec25EnviarMensajeDeTexto(&ec25_mensaje_de_texto[0], sizeof(ec25_mensaje_de_texto));
+#endif
 
     /*
     //LLamado a funcion que indeitifica acelerometro MMA8451Q
@@ -156,19 +188,42 @@ int main(void) {
 
     rslt = bme280_init(&dev);
 */
-    //inicializa todas las funciones necesarias para trabajar con el modem EC25
+#if HABILITAR_MODEM_EC25
+    //Inicializa todas las funciones necesarias para trabajar con el modem EC25
+    printf("Inicializa modem EC25\r\n");
     ec25Inicializacion();
-    ec25EnviarMensajeDeTexto(&mensaje_de_texto[0], sizeof(mensaje_de_texto));
 
-	//Ciclo infinito encendiendo y apagando led verde
+    //Configura FSM de modem para enviar mensaje de texto
+    printf("Enviando mensaje de texto por modem EC25\r\n");
+    ec25EnviarMensajeDeTexto(&ec25_mensaje_de_texto[0], sizeof(ec25_mensaje_de_texto));
+#endif
+
 	//inicia el SUPERLOOP
     while(1) {
 
     	waytTime();		//base de tiempo fija aproximadamente 200ms
 
+#if HABILITAR_SENSOR_BME280
+    	if(bme280_detectado==1){
+    		bme280_base_de_tiempo++;	//incrementa base de tiempo para tomar dato bme280
+    		if(bme280_base_de_tiempo>10){	//	>10 equivale aproximadamente a 2s
+    			bme280_base_de_tiempo=0; //reinicia contador de tiempo
+    			if(bme280ReadData(&bme280_datos)==kStatus_Success){	//toma lectura humedad, presion, temperatura
+        			printf("BME280 ->");
+    				printf("temperatura:0x%X ",bme280_datos.temperatura);	//imprime temperatura sin procesar
+        			printf("humedad:0x%X ",bme280_datos.humedad);	//imprime humedad sin procesar
+        			printf("presion:0x%X ",bme280_datos.presion);	//imprime presion sin procesar
+        			printf("\r\n");	//Imprime cambio de linea
+    			}
+    		}
+    	}
+#endif
+
+#if HABILITAR_MODEM_EC25
 		estado_actual_ec25 = ec25Polling();	//actualiza maquina de estados encargada de avanzar en el proceso interno del MODEM
 											//retorna el estado actual de la FSM
-    	switch(estado_actual_ec25){
+
+    	switch(estado_actual_ec25){       //controla color de los LEDs dependiendo de estado modemEC25
     	case kFSM_RESULTADO_ERROR:
     		toggleLedRojo();
     		apagarLedVerde();
@@ -194,6 +249,5 @@ int main(void) {
     		break;
     	}
     }
-
     return 0 ;
 }
