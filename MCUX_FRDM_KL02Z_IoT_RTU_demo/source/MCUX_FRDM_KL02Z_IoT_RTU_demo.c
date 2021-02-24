@@ -78,7 +78,7 @@
 /*******************************************************************************
  * Local vars
  ******************************************************************************/
-uint8_t mensaje_de_texto[]="Hola desde EC25_dtk_&_jmp";
+uint8_t mensaje_de_texto[]="Hola desde EC25 dtk & jmp";
 
 
 //spintf
@@ -143,7 +143,7 @@ int main(void) {
    //     if (BME280WhoAmI() == kStatus_Success){ // falta identificar donde esta whoAmI para el sensor
      //   	(void)bme280_init();	            //inicializa el sensor BME280
        // }
-
+ /*
     struct bme280_dev dev;
     int8_t rslt = BME280_OK;
     uint8_t dev_addr = BME280_I2C_ADDR_PRIM;
@@ -155,7 +155,7 @@ int main(void) {
     dev.delay_ms = user_delay_ms;
 
     rslt = bme280_init(&dev);
-
+*/
     //inicializa todas las funciones necesarias para trabajar con el modem EC25
     ec25Inicializacion();
     ec25EnviarMensajeDeTexto(&mensaje_de_texto[0], sizeof(mensaje_de_texto));

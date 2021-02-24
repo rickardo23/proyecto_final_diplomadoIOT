@@ -468,4 +468,4 @@ struct bme280_dev
     BME280_INTF_RET_TYPE intf_rslt;
 };
 
-#endif /* BME280_DEFS_H_ */
+//#endif /* BME280_DEFS_H_ */
