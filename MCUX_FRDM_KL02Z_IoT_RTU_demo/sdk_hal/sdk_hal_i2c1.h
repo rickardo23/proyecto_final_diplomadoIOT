@@ -62,7 +62,7 @@ status_t i2c1MasterInit(uint32_t baud_rate);
  * 		kStatus_Fail
  * @endcode
  */
-status_t i2c1MasterReadByte(uint8_t *data, uint8_t bytes_to_read, uint8_t device_address, int8_t memory_address);
+status_t i2c1MasterReadByte(uint8_t *data, uint8_t bytes_to_read, uint8_t device_address, uint32_t memory_address, uint8_t address_size);
 /*--------------------------------------------*/
 /*!
  * @brief Write byte to I2C1 devide
@@ -76,7 +76,7 @@ status_t i2c1MasterReadByte(uint8_t *data, uint8_t bytes_to_read, uint8_t device
  * 		kStatus_Fail
  * @endcode
  */
-status_t i2c1MasterWriteByte(uint8_t *data, uint8_t bytes_to_write, uint8_t device_address, int8_t memory_address);
+status_t i2c1MasterWriteByte(uint8_t *data, uint8_t bytes_to_write, uint8_t device_address, uint32_t memory_address, uint8_t address_size);
 
 
 
