@@ -13,8 +13,6 @@
  *					r=apaga LED conectado en PTB6
  *			v0.3 nuevo comando por puerto serial para prueba de MMA8451Q
  *					M=detecta acelerometro MM8451Q en bus I2C0
- *
- *
  */
 
 /*
@@ -85,10 +83,6 @@
 //uint8_t mensaje_de_texto[]="Hola desde EC25 dtk & jmp";
 
 //sprintf
-/*
- * variables que almacenan los datos de cada uno respectivamente
- * pressure, temperature, humidity
- */
 
 /*******************************************************************************
  * Private Source Code
@@ -99,7 +93,6 @@ void waytTime(void) {
 		tiempo--;
 	} while (tiempo != 0x0000);
 }
-
 /*
  * @brief   Application entry point.
  */
@@ -108,6 +101,7 @@ int main(void) {
     uint8_t ec25_mensaje_de_texto[]="Hola desde EC25";
 	uint8_t estado_actual_ec25;
     uint8_t ec25_detectado=0;
+
 
 	bme280_data_t bme280_datos;
 	uint8_t bme280_detectado=0;
@@ -188,7 +182,6 @@ int main(void) {
     dev.delay_ms = user_delay_ms;
 
     rslt = bme280_init(&dev);
-    \"3007632985\"
 */
 
 	//inicia el SUPERLOOP
@@ -202,10 +195,15 @@ int main(void) {
     			bme280_base_de_tiempo=0;                                        //reinicia contador de tiempo
     			if(bme280ReadData(&bme280_datos)==kStatus_Success){         	//toma lectura humedad, presion, temperatura
         			printf("-> BME280 Sensor \r\n");
-    				printf("Temperatura :0x%X \r\n",bme280_datos.temperatura);	//imprime temperatura sin procesar
-        			printf("Humedad :0x%X \r\n",bme280_datos.humedad);	        //imprime humedad sin procesar
-        			printf("Presion :0x%X \r\n",bme280_datos.presion);	        //imprime presion sin procesar
+    				printf("\t Temperatura :%d \r\n",bme280_datos.temperatura); //imprime temperatura sin procesar
+        			printf("\t Humedad :%d \r\n",bme280_datos.humedad);	        //imprime humedad sin procesar
+        			printf("\t Presion :%d \r\n",bme280_datos.presion);	        //imprime presion sin procesar
         			printf("\r\n");	                                            //Imprime cambio de linea
+
+        			sprintf((char*)(&ec25_mensaje_de_texto[0]),"Temperatura :%d \r\n",bme280_datos.temperatura);
+        			sprintf((char*)(&ec25_mensaje_de_texto[1]),"Humedad :%d \r\n",bme280_datos.humedad);
+        			sprintf((char*)(&ec25_mensaje_de_texto[2]),"Presion :%d \r\n",bme280_datos.presion);
+
     			}
     		}
     	}

@@ -58,7 +58,7 @@ const char *ec25_comandos_at[] = {
 	"AT+CPIN?",		//consulta estado de la simcard
 	"AT+CREG?",		//consulta estado de la red celular y tecnología usada en red celular
 	"AT+CMGF=1",	//asigna modo texto para enviar mensajes
-	"AT+CMGS=\"3007632985\"",//envia mensaje de texto a numero definido
+	"AT+CMGS=\"3003921941\"",//envia mensaje de texto a numero definido
 	"Mensaje", 		//MENSAJE & CTRL+Z
 	"AT+CSQ",		//consulta calidad de la señal RSSI
 	};
