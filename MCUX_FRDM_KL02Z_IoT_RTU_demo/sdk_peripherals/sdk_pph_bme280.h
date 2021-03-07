@@ -1,3 +1,4 @@
+
 /*! @file : sdk_pph_bme280.h
  * @author  Ernesto Andres Rincon Cruz
  * @version 1.0.0
@@ -46,6 +47,8 @@ enum _bme280_registers{
 /*!
  * @brief Define tipo de datos estructura que permite organizar los datos del sensor BM280
  */
+
+
 typedef struct _bme280_data{
 	uint32_t temperatura;
 	uint32_t humedad;
