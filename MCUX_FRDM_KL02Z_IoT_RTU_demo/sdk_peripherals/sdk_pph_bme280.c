@@ -92,7 +92,7 @@ status_t bme280ReadData(bme280_data_t *data) {
 		data->temperatura |= (uint32_t)(i2c_data[4] << 8);
 		data->temperatura |= (uint32_t)(i2c_data[5]);
 
-		data->humedad |= (uint32_t)(i2c_data[6] << 8);
+		data->humedad = (uint32_t)(i2c_data[6] << 8);
 		data->humedad |= (uint32_t)(i2c_data[7]);
 
 		return (kStatus_Success);
