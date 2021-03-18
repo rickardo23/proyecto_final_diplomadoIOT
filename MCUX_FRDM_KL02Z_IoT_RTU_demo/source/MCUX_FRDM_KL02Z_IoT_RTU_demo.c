@@ -39,14 +39,12 @@
 
 #include "sdk_hal_uart0.h"
 #include "sdk_hal_gpio.h"
-#include "sdk_hal_i2c0.h"
 #include "sdk_hal_i2c1.h"
-#include "sdk_hal_adc.h"
 
 #include "sdk_mdlw_leds.h"
-#include "sdk_pph_mma8451Q.h"
 #include "sdk_pph_ec25au.h"
 #include "sdk_pph_bme280.h"
+#include "sdk_pph_bme280_defs.h"
 
 /*******************************************************************************
  * Definitions
@@ -65,9 +63,7 @@
 
 #define HABILITAR_MODEM_EC25		1
 #define HABILITAR_SENSOR_BME280		1
-#define HABILITAR_SENSOR_MMA8451Q	1
-#define HABILITAR_ENTRADA_ADC_PTB8	1
-#define HABILITAR_SENSOR_SHT3X		1
+
 
 /*******************************************************************************
  * Private Prototypes
@@ -102,12 +98,19 @@ int main(void) {
 	uint8_t estado_actual_ec25;
     uint8_t ec25_detectado=0;
 
-
+    //uint8_t calibracion_temp;
+    //calibracion calibracion_temp;
 	bme280_data_t bme280_datos;
 	uint8_t bme280_detectado=0;
 	uint8_t bme280_base_de_tiempo=0;
 
-    
+	float temperatura_float;//variable que recibe el calculo
+	float valor_temperatura;
+	float humedad_float;
+	float valor_humedad;
+	float presion_float;
+	float valor_presion;
+
     //inicializa el hardware de la tarjeta
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
@@ -124,12 +127,14 @@ int main(void) {
     }
     printf("OK\r\n");
 
+/*
     //inicializa puerto I2C0 y solo avanza si es exitoso el proceso
     printf("Inicializa I2C0:");
     if(i2c0MasterInit(100000)!=kStatus_Success){	//100kbps
     	return 0 ;
     }
     printf("OK\r\n");
+*/
 
     //inicializa puerto I2C1 y solo avanza si es exitoso el proceso
     printf("Inicializa I2C1:");
@@ -194,15 +199,60 @@ int main(void) {
     		if(bme280_base_de_tiempo>10){	                                    //>10 equivale aproximadamente a 2s
     			bme280_base_de_tiempo=0;                                        //reinicia contador de tiempo
     			if(bme280ReadData(&bme280_datos)==kStatus_Success){         	//toma lectura humedad, presion, temperatura
-        			printf("-> BME280 Sensor \r\n");
+
+	    			temperatura_float = (float)bme280_datos.temperatura;
+	    			//valor_temperatura = -45 + ((175*(temperatura_float))/65535);
+
+	    			static int32_t compensate_temperature(bme280_calib_data *calib)
+	    			{
+	    			    int32_t var1;
+	    			    int32_t var2;
+	    			    int32_t temperatura;
+	    			    int32_t temperatura_min = -4000;
+	    			    int32_t temperatura_max = 8500;
+
+	    			    var1 = (int32_t)((temperatura_float / 8) - ((int32_t)calib->dig_t1 * 2));
+	    			    var1 = (var1 * ((int32_t)calib-> dig_t2)) / 2048;
+	    			    var2 = (int32_t)((temperatura_float / 16) - ((int32_t)calib->dig_t1));
+	    			    var2 = (((var2 * var2) / 4096) * ((int32_t)calib->dig_t3)) / 16384;
+	    			    calib->t_fine = var1 + var2;
+	    			    temperatura = (calib->t_fine * 5 + 128) / 256;
+
+	    			    if (temperatura < temperatura_min)
+	    			    {
+	    			        temperatura = temperatura_min;
+	    			    }
+	    			    else if (temperatura > temperatura_max)
+	    			    {
+	    			        temperatura = temperatura_max;
+	    			    }
+
+	    			    valor_temperatura = temperatura;
+	    			}
+
+
+	    			humedad_float = (float)bme280_datos.humedad;
+	    			valor_humedad = 100 * ((humedad_float)/65535);
+
+	    			presion_float = (float)bme280_datos.humedad;
+	    			valor_presion = 100 * ((humedad_float)/65535);
+
+	    			//Lectura_sensor(valor_temperatura,valor_humedad);
+
+    				printf("\t Temperatura :%d \r\n",valor_temperatura);    //imprime temperatura sin procesar
+        			printf("\t Humedad :%d \r\n",valor_humedad);	        //imprime humedad sin procesar
+        			printf("\t Presion :%d \r\n",valor_presion);	        //imprime presion sin procesar
+
+        			/*
+    				printf("-> BME280 Sensor \r\n");
     				printf("\t Temperatura :%d \r\n",bme280_datos.temperatura); //imprime temperatura sin procesar
         			printf("\t Humedad :%d \r\n",bme280_datos.humedad);	        //imprime humedad sin procesar
         			printf("\t Presion :%d \r\n",bme280_datos.presion);	        //imprime presion sin procesar
         			printf("\r\n");	                                            //Imprime cambio de linea
-
-        			sprintf((char*)(&ec25_mensaje_de_texto[0]),"Temperatura :%d \r\n",bme280_datos.temperatura);
-        			sprintf((char*)(&ec25_mensaje_de_texto[1]),"Humedad :%d \r\n",bme280_datos.humedad);
-        			sprintf((char*)(&ec25_mensaje_de_texto[2]),"Presion :%d \r\n",bme280_datos.presion);
+                    */
+        			//sprintf((char*)(&ec25_mensaje_de_texto[0]),"Temperatura :%d \r\n",bme280_datos.temperatura);
+        			//sprintf((char*)(&ec25_mensaje_de_texto[1]),"Humedad :%d \r\n",bme280_datos.humedad);
+        			//sprintf((char*)(&ec25_mensaje_de_texto[2]),"Presion :%d \r\n",bme280_datos.presion);
 
     			}
     		}
@@ -231,7 +281,19 @@ int main(void) {
     		apagarLedVerde();
     		toggleLedAzul();
     		break;
+/*
+    	case kFSM_RESULTADO_ERROR_QIACT_1:
+    	    toggleLedRojo();
+    	    apagarLedVerde();
+    	    toggleLedAzul();
+    	    break;
 
+    	case kFSM_RESULTADO_ERROR_QMTOPEN:
+    	    toggleLedRojo();
+    	    apagarLedVerde();
+    	    toggleLedAzul();
+    	    break;
+*/
     	default:
     		apagarLedRojo();
     		apagarLedVerde();
