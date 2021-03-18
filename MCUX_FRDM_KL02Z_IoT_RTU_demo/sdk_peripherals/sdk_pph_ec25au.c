@@ -25,9 +25,11 @@ typedef struct _estado_fsm{
 enum _ec25_lista_ordendes{
 	kORDEN_NO_HAY_EN_EJECUCION=0,
 	kORDEN_ENVIAR_MENSAJE_DE_TEXTO,
+	ENVIAR_MENSAJE_MQTT,
 };
 
 #define EC25_BYTES_EN_BUFFER	100
+#define BUFFER_MQTT 200
 /*******************************************************************************
  * Private Prototypes
  ******************************************************************************/
@@ -41,6 +43,7 @@ void ec25BorrarBufferRX(void);
 /*******************************************************************************
  * Local vars
  ******************************************************************************/
+char mensaje_mqtt[BUFFER_MQTT];
 uint8_t ec25_buffer_tx[EC25_BYTES_EN_BUFFER];		//almacena los datos a enviar al modem
 uint8_t ec25_buffer_rx[EC25_BYTES_EN_BUFFER];		//almacena las datos que provienen del modem
 uint8_t ec25_index_buffer_rx = 0;				//apuntador de buffer de datos
@@ -110,8 +113,11 @@ void waytTimeModem(void) {
 }
 //------------------------------------
 void ec25EnviarComandoAT(uint8_t comando){
+	char comando_at[EC25_BYTES_EN_BUFFER];
 	printf("%s\r\n", ec25_comandos_at[comando]);	//Envia comando AT indicado
+	uart0ImprimirMensaje((uint8_t *)(&comando_at[0]),strlen(comando_at));	//Envia comando AT indicado
 }
+
 //------------------------------------
 status_t ec25ProcesarRespuestaAT(uint8_t comando){
 	status_t resultado_procesamiento;	//variable que almacenará el resultado del procesamiento
