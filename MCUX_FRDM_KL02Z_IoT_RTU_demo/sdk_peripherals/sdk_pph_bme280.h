@@ -48,7 +48,6 @@ enum _bme280_registers{
  * @brief Define tipo de datos estructura que permite organizar los datos del sensor BM280
  */
 
-
 typedef struct _bme280_data{
 	uint32_t temperatura;
 	uint32_t humedad;
@@ -107,3 +106,4 @@ status_t bme280Init(void);
 /** @} */ // end of X group
 
 #endif /* SDK_PPH_BME280_H_ */
+

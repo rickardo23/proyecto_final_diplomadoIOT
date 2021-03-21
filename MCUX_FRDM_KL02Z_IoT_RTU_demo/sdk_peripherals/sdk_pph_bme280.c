@@ -12,7 +12,6 @@
 #include "sdk_pph_bme280.h"
 #include "sdk_pph_bme280_defs.h"
 
-
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -77,6 +76,7 @@
 
  	return(kStatus_Success);
  }
+
  //-------------------------------------------------------------------------------------------------
 status_t bme280ReadData(bme280_data_t *data) {
 	status_t status;
@@ -100,36 +100,36 @@ status_t bme280ReadData(bme280_data_t *data) {
 		return (status);
 	}
 }
-  //-----------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
 /*
-static int32_t compensate_temperature(bme280_data_t *dato, struct bme280_calib_data *calib)
-{
-    int32_t var1;
-    int32_t var2;
-    int32_t temperatura;
-    int32_t temperatura_min = -4000;
-    int32_t temperatura_max = 8500;
+static int32_t compensate_temperature(struct bme280_calib_data *calib)
+	    			{
+	    			    int32_t var1;
+	    			    int32_t var2;
+	    			    int32_t temperatura;
+	    			    int32_t temperatura_min = -4000;
+	    			    int32_t temperatura_max = 8500;
 
-    var1 = (int32_t)((dato->temperatura / 8) - ((int32_t)calib->dig_t1 * 2));
-    var1 = (var1 * ((int32_t)calib->dig_t2)) / 2048;
-    var2 = (int32_t)((dato->temperatura / 16) - ((int32_t)calib->dig_t1));
-    var2 = (((var2 * var2) / 4096) * ((int32_t)calib->dig_t3)) / 16384;
-    calib->t_fine = var1 + var2;
-    temperatura = (calib->t_fine * 5 + 128) / 256;
+	    			    var1 = (int32_t)((bme280_datos.temperatura / 8) - ((int32_t)calib->dig_t1 * 2));
+	    			    var1 = (var1 * ((int32_t)calib-> dig_t2)) / 2048;
+	    			    var2 = (int32_t)((temperatura_float / 16) - ((int32_t)calib->dig_t1));
+	    			    var2 = (((var2 * var2) / 4096) * ((int32_t)calib->dig_t3)) / 16384;
+	    			    calib->t_fine = var1 + var2;
+	    			    temperatura = (calib->t_fine * 5 + 128) / 256;
 
-    if (temperatura < temperatura_min)
-    {
-        temperatura = temperatura_min;
-    }
-    else if (temperatura > temperatura_max)
-    {
-        temperatura = temperatura_max;
-    }
+	    			    if (temperatura < temperatura_min)
+	    			    {
+	    			        temperatura = temperatura_min;
+	    			    }
+	    			    else if (temperatura > temperatura_max)
+	    			    {
+	    			        temperatura = temperatura_max;
+	    			    }
 
-    dato->temperatura = temperatura;
-}
+	    			    valor_temperatura = temperatura;
+	    			}
 */
-//---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------
 /*
 static double compensate_temperature(bme280_data_t *dato, struct bme280_calib_data *calib)
 {

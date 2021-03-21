@@ -98,18 +98,12 @@ int main(void) {
 	uint8_t estado_actual_ec25;
     uint8_t ec25_detectado=0;
 
-    //uint8_t calibracion_temp;
-    //calibracion calibracion_temp;
+
 	bme280_data_t bme280_datos;
 	uint8_t bme280_detectado=0;
 	uint8_t bme280_base_de_tiempo=0;
 
-	float temperatura_float;//variable que recibe el calculo
-	float valor_temperatura;
-	float humedad_float;
-	float valor_humedad;
-	float presion_float;
-	float valor_presion;
+
 
     //inicializa el hardware de la tarjeta
     BOARD_InitBootPins();
@@ -127,14 +121,6 @@ int main(void) {
     }
     printf("OK\r\n");
 
-/*
-    //inicializa puerto I2C0 y solo avanza si es exitoso el proceso
-    printf("Inicializa I2C0:");
-    if(i2c0MasterInit(100000)!=kStatus_Success){	//100kbps
-    	return 0 ;
-    }
-    printf("OK\r\n");
-*/
 
     //inicializa puerto I2C1 y solo avanza si es exitoso el proceso
     printf("Inicializa I2C1:");
@@ -164,30 +150,6 @@ int main(void) {
     ec25EnviarMensajeDeTexto(&ec25_mensaje_de_texto[0], sizeof(ec25_mensaje_de_texto));
 #endif
 
-    /*
-    //LLamado a funcion que indeitifica acelerometro MMA8451Q
-    if (mma8451QWhoAmI() == kStatus_Success){
-    	(void)mma8451QInit();	             //inicializa acelerometro MMA8451Q
-    }
-    */
-
-    //LLamado a funcion que indeitifica al sensor BME280
-   //     if (BME280WhoAmI() == kStatus_Success){ // falta identificar donde esta whoAmI para el sensor
-     //   	(void)bme280_init();	            //inicializa el sensor BME280
-       // }
- /*
-    struct bme280_dev dev;
-    int8_t rslt = BME280_OK;
-    uint8_t dev_addr = BME280_I2C_ADDR_PRIM;
-
-    dev.intf_ptr = &dev_addr;
-    dev.intf = BME280_I2C_INTF;
-    dev.read = user_i2c_read;
-    dev.write = user_i2c_write;
-    dev.delay_ms = user_delay_ms;
-
-    rslt = bme280_init(&dev);
-*/
 
 	//inicia el SUPERLOOP
     while(1) {
@@ -200,49 +162,14 @@ int main(void) {
     			bme280_base_de_tiempo=0;                                        //reinicia contador de tiempo
     			if(bme280ReadData(&bme280_datos)==kStatus_Success){         	//toma lectura humedad, presion, temperatura
 
-	    			temperatura_float = (float)bme280_datos.temperatura;
-	    			//valor_temperatura = -45 + ((175*(temperatura_float))/65535);
-
-	    			static int32_t compensate_temperature(bme280_calib_data *calib)
-	    			{
-	    			    int32_t var1;
-	    			    int32_t var2;
-	    			    int32_t temperatura;
-	    			    int32_t temperatura_min = -4000;
-	    			    int32_t temperatura_max = 8500;
-
-	    			    var1 = (int32_t)((temperatura_float / 8) - ((int32_t)calib->dig_t1 * 2));
-	    			    var1 = (var1 * ((int32_t)calib-> dig_t2)) / 2048;
-	    			    var2 = (int32_t)((temperatura_float / 16) - ((int32_t)calib->dig_t1));
-	    			    var2 = (((var2 * var2) / 4096) * ((int32_t)calib->dig_t3)) / 16384;
-	    			    calib->t_fine = var1 + var2;
-	    			    temperatura = (calib->t_fine * 5 + 128) / 256;
-
-	    			    if (temperatura < temperatura_min)
-	    			    {
-	    			        temperatura = temperatura_min;
-	    			    }
-	    			    else if (temperatura > temperatura_max)
-	    			    {
-	    			        temperatura = temperatura_max;
-	    			    }
-
-	    			    valor_temperatura = temperatura;
-	    			}
-
-
-	    			humedad_float = (float)bme280_datos.humedad;
-	    			valor_humedad = 100 * ((humedad_float)/65535);
-
-	    			presion_float = (float)bme280_datos.humedad;
-	    			valor_presion = 100 * ((humedad_float)/65535);
-
-	    			//Lectura_sensor(valor_temperatura,valor_humedad);
 
     				printf("\t Temperatura :%d \r\n",valor_temperatura);    //imprime temperatura sin procesar
         			printf("\t Humedad :%d \r\n",valor_humedad);	        //imprime humedad sin procesar
         			printf("\t Presion :%d \r\n",valor_presion);	        //imprime presion sin procesar
 
+        			printf("\t Temperatura :%d \r\n",temperatura_float);
+        			printf("\t Humedad :%d \r\n",bme280_datos.humedad);	        //imprime humedad sin procesar
+        			printf("\t Presion :%d \r\n",bme280_datos.presion);
         			/*
     				printf("-> BME280 Sensor \r\n");
     				printf("\t Temperatura :%d \r\n",bme280_datos.temperatura); //imprime temperatura sin procesar
