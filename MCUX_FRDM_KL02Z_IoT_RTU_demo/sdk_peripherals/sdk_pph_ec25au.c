@@ -73,7 +73,7 @@ const char *ec25_comandos_at[] = {
    "AT+CGDCONT=1,\"IP\",\"web.colombiamovil.com.co\"",  //configura APN para la red movil de tigo
    "AT+QIACT=1",
    "AT+QIACT?",
-   "AT+QMTOPEN=0,\"20.55.202.62\",1883",					//Abre una red para el cliente MQTT
+   "AT+QMTOPEN=0,\"20.55.202.62\",1883",			    //Abre una red para el cliente MQTT
    "AT+QMTCONN=0,\"modem\"[,\"guest\",\"guest\"]",		//gestiona la Conécion al servidor MQTT
    "AT+QMTPUB=0,1,1,0,\"1/sensor\"",    //publica mensajes con una longitud fija por un cliente a un servidor.
    "MENSAJE MQTT", 		                //Mensaje & CTRL+Z
@@ -98,9 +98,9 @@ const char  *ec25_repuestas_at[]={
 		 "OK",		    //AT+CGDCONT=1, web.colombiamovil.com.co
 		 "OK",          //AT+QIACT=1
 		 "1,1,1",	    //AT+QIACT?
-		 "QMTOPEN: 0,0",		//AT+QMTOPEN=0,\"142.93.88.99\",1883//-------------------------------------------------------------------------------
-		 "QMTCONN: 0,0,0",		//AT+QMTCONN=0,\"modem\"[,\"guest\",\"guest\"]\"
-		 ">",		            //AT+QMTPUB=0,1,1,0,\"1/sensor\"
+		 "QMTOPEN: 0,0",	//AT+QMTOPEN=0,\"20.55.202.62\",1883
+		 "QMTCONN: 0,0,0",  //AT+QMTCONN=0,\"modem\"[,\"guest\",\"guest\"]\"
+		 ">",		    //AT+QMTPUB=0,1,1,0,\"1/sensor\"
 		 "OK",		    //MENSAJE MQTT
 		 "pdpdeact",    //AT+CFUN=0
 		 "OK",          //AT+CFUN=1
@@ -144,7 +144,7 @@ void waytTimeModem(void) {
 //-------------------------------------------------------------------------------
 void ec25EnviarComandoAT(uint8_t comando){
 	char comando_at[EC25_BYTES_EN_BUFFER];
-	sprintf(comando_at,"%s\r\n", ec25_comandos_at[comando]);	//Prepara en buffercomandoa enviar al modem
+	sprintf(comando_at,"%s\r\n", ec25_comandos_at[comando]);	            //Prepara en buffercomandoa enviar al modem
 	uart0ImprimirMensaje((uint8_t *)(&comando_at[0]),strlen(comando_at));	//Envia comando AT indicado
 }
 
