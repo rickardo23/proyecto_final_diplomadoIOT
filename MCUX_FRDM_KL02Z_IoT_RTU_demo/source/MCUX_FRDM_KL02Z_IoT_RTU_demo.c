@@ -103,6 +103,12 @@ int main(void) {
 	uint8_t bme280_detectado=0;
 	uint8_t bme280_base_de_tiempo=0;
 
+	float temperatura;
+	float dato_temp;
+	float humedad;
+	float datos_hum;
+	float presion;
+	float dato_pres;
 
 
     //inicializa el hardware de la tarjeta
@@ -144,7 +150,7 @@ int main(void) {
     //Inicializa todas las funciones necesarias para trabajar con el modem EC25
     printf("Inicializa modem EC25\r\n");
     ec25Inicializacion();
-
+    ec25InicializarMQTT();
     //Configura FSM de modem para enviar mensaje de texto
     printf("Enviando mensaje de texto por modem EC25\r\n");
     ec25EnviarMensajeDeTexto(&ec25_mensaje_de_texto[0], sizeof(ec25_mensaje_de_texto));
@@ -162,12 +168,22 @@ int main(void) {
     			bme280_base_de_tiempo=0;                                        //reinicia contador de tiempo
     			if(bme280ReadData(&bme280_datos)==kStatus_Success){         	//toma lectura humedad, presion, temperatura
 
+    				temperatura = (float)bme280_datos.temperatura;
+    				dato_temp = -45 + ((175*(temperatura))/65535);
+
+    				humedad = (float)bme280_datos.humedad;
+    				dato_hum = 100 * ((humedad)/65535);
+
+    				presion = (float)bme280_datos.presion;
+    				dato_pres = 100 * ((presion)/65535);
+
+    				ec25sensor(dato_temp,dato_hum,dato_pres);
 
     				printf("\t Temperatura :%d \r\n",valor_temperatura);    //imprime temperatura sin procesar
         			printf("\t Humedad :%d \r\n",valor_humedad);	        //imprime humedad sin procesar
         			printf("\t Presion :%d \r\n",valor_presion);	        //imprime presion sin procesar
 
-        			printf("\t Temperatura :%d \r\n",temperatura_float);
+        			printf("\t Temperatura :%d \r\n",bme280_datos.temperatura);
         			printf("\t Humedad :%d \r\n",bme280_datos.humedad);	        //imprime humedad sin procesar
         			printf("\t Presion :%d \r\n",bme280_datos.presion);
         			/*
@@ -208,7 +224,7 @@ int main(void) {
     		apagarLedVerde();
     		toggleLedAzul();
     		break;
-/*
+
     	case kFSM_RESULTADO_ERROR_QIACT_1:
     	    toggleLedRojo();
     	    apagarLedVerde();
@@ -220,7 +236,7 @@ int main(void) {
     	    apagarLedVerde();
     	    toggleLedAzul();
     	    break;
-*/
+
     	default:
     		apagarLedRojo();
     		apagarLedVerde();
