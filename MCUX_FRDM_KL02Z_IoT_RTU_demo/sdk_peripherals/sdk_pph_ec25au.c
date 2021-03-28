@@ -462,7 +462,7 @@ void ec25EnviarMensajeMQTT(void){
 
 }
 //-------------------------------------------------------------------------------
-status_t ec25sensor(float valor_temp, float valor_hum, float valor_pres){
+status_t ec25sensor(float dato_temp, float dato_hum, float dato_pres){
 
 	sprintf(ec25_mensaje_mqtt,"temperatura,%.2f,humedad,%.2f,presion,%.2f, \r\n %c",valor_temp,valor_hum,valor_pres, 0x1A);
 	//uart0ImprimirMensaje((uint8_t *)(&comando_at[0]),strlen(comando_at));	//Envia comando AT indicado
