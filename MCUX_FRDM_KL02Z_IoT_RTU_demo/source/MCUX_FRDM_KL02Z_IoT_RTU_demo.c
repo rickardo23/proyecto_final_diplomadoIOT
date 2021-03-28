@@ -101,7 +101,7 @@ int main(void) {
 	float temperatura;
 	float dato_temp;
 	float humedad;
-	float datos_hum;
+	float dato_hum;
 	float presion;
 	float dato_pres;
 
