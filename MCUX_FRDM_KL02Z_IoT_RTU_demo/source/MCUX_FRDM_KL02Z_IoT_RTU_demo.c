@@ -16,10 +16,6 @@
  */
 
 /*
- *  bme280_defs.h: este archivo de encabezado tiene las constantes, macros y declaraciones de tipos de datos.
- *  bme280.h: este archivo de encabezado contiene las declaraciones de las API del controlador del sensor.
- *  bme280.c: este archivo fuente contiene las definiciones de las API del controlador del sensor.
- *
     En caso de la macro "BME280 FLOAT ENABLE" habilitada, las salidas son dobles y las unidades son
       -° C para temperatura
       -% humedad relativa
@@ -78,7 +74,6 @@
  ******************************************************************************/
 //uint8_t mensaje_de_texto[]="Hola desde EC25 dtk & jmp";
 
-//sprintf
 
 /*******************************************************************************
  * Private Source Code

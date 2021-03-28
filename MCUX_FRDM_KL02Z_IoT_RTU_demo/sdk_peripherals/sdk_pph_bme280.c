@@ -36,8 +36,6 @@
 /*******************************************************************************
  * Public Source Code
  ******************************************************************************/
-
-
 //------------------------------------------------------------------------------
  status_t bme280WhoAmI(void) {
 	status_t status;
@@ -58,16 +56,9 @@
  status_t bme280Init(void){
  	status_t status;
  	uint8_t i2c_data;
-
-    /*  write 00000 101 = 0x05 to CTRL_HUM */
- 	/*  [2-0] = 101	humidity oversampling x 16*/
  	i2c_data = 0x05;
  	status = bme280WriteByte(&i2c_data, 1, BME280_ADDRESS, BME280_REG_CTRL_HUM, 1);
 
-    /*  write 101 101 11 = 0xB7 to CTRL_MEAS */
- 	/*  [7-5] = 101 temperature oversampling x 16*/
- 	/*  [4-2] = 101	pressure oversampling x 16*/
- 	/*  [1-0] = 11 	Normal Mode*/
  	i2c_data = 0xB7;
  	status = bme280WriteByte(&i2c_data, 1, BME280_ADDRESS, BME280_REG_CTRL_MEAS, 1);
 
