@@ -70,7 +70,6 @@ const char *ec25_comandos_at[] = {
    "AT+CREG?",		                    //consulta estado de la red celular y tecnología usada en red celular
    "AT+CGREG?",                         //consulta el estado de registro de la red
    "AT+CEREG?",                         //consulta el estado de registro de la red.
-   "AT+COPS?"                           //identifica el operador---------------------------------------------------
    "AT+CGDCONT=1,\"IP\",\"web.colombiamovil.com.co\"",  //configura APN para la red movil de tigo
    "AT+QIACT=1",
    "AT+QIACT?",
@@ -520,7 +519,7 @@ uint8_t ec25Polling(void){
 	case kFSM_ENVIANDO_QCFG_CONFIG1:
 		printf("Enviando AT+QCFG=\"nwscanmode\",0,1:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
-		ec25EnviarComandoAT(kAT_QCFG_CONFIG1);	    //Envia comando AT+QCFG=\"nwscanmode\",0,1:"
+		ec25EnviarComandoAT(kAT_QCFG_CONFIG1);	    //Envia comando AT+QCFG="nwscanmode",0,1:"
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
 		ec25_fsm.actual = kFSM_ESPERANDO_RESPUESTA;	//avanza a esperar respuesta del modem
 		ec25_timeout = 0;	                        //reset a contador de tiempo
@@ -529,7 +528,7 @@ uint8_t ec25Polling(void){
 	case kFSM_ENVIANDO_QCFG_CONFIG2:
 		printf("Enviando AT+QCFG=\"band\",0, 800005A,0:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
-		ec25EnviarComandoAT(kAT_QCFG_CONFIG2);	    //Envia comando  AT+QCFG=\"band\",0, 800005A,0:
+		ec25EnviarComandoAT(kAT_QCFG_CONFIG2);	    //Envia comando  AT+QCFG="band",0, 800005A,0:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
 		ec25_fsm.actual = kFSM_ESPERANDO_RESPUESTA;	//avanza a esperar respuesta del modem
 		ec25_timeout = 0;	                        //reset a contador de tiempo
@@ -574,7 +573,7 @@ uint8_t ec25Polling(void){
 	case kFSM_ENVIANDO_CGDCONT:
 		printf("Enviando AT+CGDCONT=1,\"IP\",\"web.colombiamovil.com.co\":");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
-		ec25EnviarComandoAT(kAT_CGDCONT);	        //Envia comando AT+CGDCONT=1,\"IP\",\"web.colombiamovil.com.co\":
+		ec25EnviarComandoAT(kAT_CGDCONT);	        //Envia comando AT+CGDCONT=1,"IP","web.colombiamovil.com.co":
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
 		ec25_fsm.actual = kFSM_ESPERANDO_RESPUESTA;	//avanza a esperar respuesta del modem
 		ec25_timeout = 0;	                        //reset a contador de tiempo
@@ -583,7 +582,7 @@ uint8_t ec25Polling(void){
 	case kFSM_ENVIANDO_QIACT_1:
 		printf("Enviando AT+QIACT=1:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
-		ec25EnviarComandoAT(kAT_QIACT_1);	        //Envia comando AT+QIACT=1:"
+		ec25EnviarComandoAT(kAT_QIACT_1);	        //Envia comando AT+QIACT=1:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
 		ec25_fsm.actual = kFSM_ESPERANDO_RESPUESTA;	//avanza a esperar respuesta del modem
 		ec25_timeout = 0;	                        //reset a contador de tiempo
@@ -601,7 +600,7 @@ uint8_t ec25Polling(void){
 	case kFSM_ENVIANDO_QMTOPEN:
 		printf("Enviando AT+QMTOPEN=0,\"20.55.202.62\",1883:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
-		ec25EnviarComandoAT(kAT_QMTOPEN);	        //Envia comando AT+QMTOPEN=0,\"20.55.202.62\",1883:
+		ec25EnviarComandoAT(kAT_QMTOPEN);	        //Envia comando AT+QMTOPEN=0,"20.55.202.62",1883:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
 		ec25_fsm.actual = kFSM_ESPERANDO_RESPUESTA;	//avanza a esperar respuesta del modem
 		ec25_timeout = 0;	                        //reset a contador de tiempo
@@ -610,7 +609,7 @@ uint8_t ec25Polling(void){
 	case kFSM_ENVIANDO_QMTCONN:
 		printf("Enviando AT+QMTCONN=0,\"modem\"[,\"guest\",\"guest\"]:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
-		ec25EnviarComandoAT(kAT_QMTCONN);	        //Envia comando AT+QMTCONN=0,\"modem\"[,\"guest\",\"guest\"]:
+		ec25EnviarComandoAT(kAT_QMTCONN);	        //Envia comando AT+QMTCONN=0,"modem"[,"guest","guest"]:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
 		ec25_fsm.actual = kFSM_ESPERANDO_RESPUESTA;	//avanza a esperar respuesta del modem
 		ec25_timeout = 0;	                        //reset a contador de tiempo
@@ -689,85 +688,85 @@ uint8_t ec25Polling(void){
 				break;
 
 			case kFSM_ENVIANDO_CPIN:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
-				ec25_fsm.actual = kFSM_ENVIANDO_QCFG_CONFIG1;//avanza a enviar nuevo comando al modem
+				ec25_fsm.anterior = ec25_fsm.actual;          //almacena el estado actual
+				ec25_fsm.actual = kFSM_ENVIANDO_QCFG_CONFIG1; //avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_QCFG_CONFIG1:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el resultado actual
-				ec25_fsm.actual = kFSM_ENVIANDO_QCFG_CONFIG2;//avanza a enviar nuevo comando al modem
+				ec25_fsm.anterior = ec25_fsm.actual;          //almacena el resultado actual
+				ec25_fsm.actual = kFSM_ENVIANDO_QCFG_CONFIG2; //avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_QCFG_CONFIG2:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el resultado actual
-				ec25_fsm.actual = kFSM_ENVIANDO_QCSQ;//avanza a enviar nuevo comando al modem
+				ec25_fsm.anterior = ec25_fsm.actual;  //almacena el resultado actual
+				ec25_fsm.actual = kFSM_ENVIANDO_QCSQ; //avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_QCSQ:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el resultado actual
+				ec25_fsm.anterior = ec25_fsm.actual; //almacena el resultado actual
 				ec25_fsm.actual = kFSM_ENVIANDO_CREG;//avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_CREG:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
+				ec25_fsm.anterior = ec25_fsm.actual;  //almacena el estado actual
 				ec25_fsm.actual = kFSM_ENVIANDO_CGREG;//avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_CGREG:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
+				ec25_fsm.anterior = ec25_fsm.actual;  //almacena el estado actual
 				ec25_fsm.actual = kFSM_ENVIANDO_CEREG;//avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_CEREG:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
+				ec25_fsm.anterior = ec25_fsm.actual;    //almacena el estado actual
 				ec25_fsm.actual = kFSM_ENVIANDO_CGDCONT;//avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_CGDCONT:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el resultado actual
+				ec25_fsm.anterior = ec25_fsm.actual;    //almacena el resultado actual
 				ec25_fsm.actual = kFSM_ENVIANDO_QIACT_1;//avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_QIACT_1:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
+				ec25_fsm.anterior = ec25_fsm.actual;  //almacena el estado actual
 				ec25_fsm.actual = kFSM_ENVIANDO_QIACT;//avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_QIACT:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
+				ec25_fsm.anterior = ec25_fsm.actual;    //almacena el estado actual
 				ec25_fsm.actual = kFSM_ENVIANDO_QMTOPEN;//avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_QMTOPEN:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
+				ec25_fsm.anterior = ec25_fsm.actual;    //almacena el estado actual
 				ec25_fsm.actual = kFSM_ENVIANDO_QMTCONN;//avanza a enviar nuevo comando al modem
 
 				break;
 
 			case kFSM_ENVIANDO_QMTCONN:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
+				ec25_fsm.anterior = ec25_fsm.actual;       //almacena el estado actual
  			    ec25_fsm.actual = kFSM_ENVIANDO_QMTPUB_T_H;//avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_QMTPUB_T_H:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
+				ec25_fsm.anterior = ec25_fsm.actual;         //almacena el estado actual
 			    ec25_fsm.actual = kFSM_ENVIANDO_MQTT_MSJ_T_H;//avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_MQTT_MSJ_T_H:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
+				ec25_fsm.anterior = ec25_fsm.actual;       //almacena el estado actual
 				ec25_fsm.actual = kFSM_ENVIANDO_QMTPUB_T_H;//avanza a enviar nuevo comando al modem
 				ec25BorrarBufferTX();
 				break;
 
 			case kFSM_ENVIANDO_CSQ:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
-				ec25_fsm.actual = kFSM_ENVIANDO_AT;//avanza a enviar nuevo comando al modem
+				ec25_fsm.anterior = ec25_fsm.actual; //almacena el estado actual
+				ec25_fsm.actual = kFSM_ENVIANDO_AT;  //avanza a enviar nuevo comando al modem
 				break;
 
 			case kFSM_ENVIANDO_QLTS_2:
-				ec25_fsm.anterior = ec25_fsm.actual;//almacena el estado actual
-			    ec25_fsm.actual = kFSM_ENVIANDO_AT;//avanza a enviar nuevo comando al modem
+				ec25_fsm.anterior = ec25_fsm.actual; //almacena el estado actual
+			    ec25_fsm.actual = kFSM_ENVIANDO_AT;  //avanza a enviar nuevo comando al modem
 			    break;
 
 			default:
