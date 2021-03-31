@@ -70,11 +70,12 @@ const char *ec25_comandos_at[] = {
    "AT+CREG?",		                    //consulta estado de la red celular y tecnología usada en red celular
    "AT+CGREG?",                         //consulta el estado de registro de la red
    "AT+CEREG?",                         //consulta el estado de registro de la red.
+   "AT+COPS?"                           //identifica el operador---------------------------------------------------
    "AT+CGDCONT=1,\"IP\",\"web.colombiamovil.com.co\"",  //configura APN para la red movil de tigo
    "AT+QIACT=1",
    "AT+QIACT?",
-   "AT+QMTOPEN=0,\"20.55.202.62\",1883",			    //Abre una red para el cliente MQTT
-   "AT+QMTCONN=0,\"modem\"[,\"guest\",\"guest\"]",		//gestiona la Conécion al servidor MQTT
+   "AT+QMTOPEN=0,\"20.55.202.62\",1883",		    //Abre una red para el cliente MQTT
+   "AT+QMTCONN=0,\"modem\"[,\"guest\",\"guest\"]",	//gestiona la Conécion al servidor MQTT
    "AT+QMTPUB=0,1,1,0,\"1/sensor\"",    //publica mensajes con una longitud fija por un cliente a un servidor.
    "MENSAJE MQTT", 		                //Mensaje & CTRL+Z
    "AT+CFUN=0",                         //Cambie el teléfono a la funcionalidad mínima
@@ -89,18 +90,18 @@ const char  *ec25_repuestas_at[]={
 		 "OK",		    //AT
 		 "EC25",		//ATI
 		 "READY",	    //AT+CPIN?
-		 "OK",		    //AT+QCFG=\"nwscanmode\",0,1
-		 "OK",		    //AT+QCFG=\"band\",0, 800005A,0
+		 "OK",		    //AT+QCFG="nwscanmode",0,1
+		 "OK",		    //AT+QCFG="band",0, 800005A,0
 		 "\"LTE\"",     //AT+QCSQ
-		 "0,1",		    //AT+CREG? = GSM,REGISTERED
+		 "0,1",		    //AT+CREG?
 		 "0,1",         //AT+CEREG?
 		 "0,1",         //AT+CEREG
-		 "OK",		    //AT+CGDCONT=1, web.colombiamovil.com.co
+		 "OK",		    //AT+CGDCONT=1,"IP","web.colombiamovil.com.co"
 		 "OK",          //AT+QIACT=1
 		 "1,1,1",	    //AT+QIACT?
-		 "QMTOPEN: 0,0",	//AT+QMTOPEN=0,\"20.55.202.62\",1883
-		 "QMTCONN: 0,0,0",  //AT+QMTCONN=0,\"modem\"[,\"guest\",\"guest\"]\"
-		 ">",		    //AT+QMTPUB=0,1,1,0,\"1/sensor\"
+		 "QMTOPEN: 0,0",	//AT+QMTOPEN=0,"20.55.202.62",1883
+		 "QMTCONN: 0,0,0",  //AT+QMTCONN=0,"modem"[,"guest","guest"]
+		 ">",		    //AT+QMTPUB=0,1,1,0,"1/sensor"
 		 "OK",		    //MENSAJE MQTT
 		 "pdpdeact",    //AT+CFUN=0
 		 "OK",          //AT+CFUN=1
@@ -410,11 +411,11 @@ status_t ec25ProcesarRespuestaAT(uint8_t comando){
 				resultado_procesamiento=kStatus_OutOfRange;
 				printf("FUERA DE RANGO\r\n");
 			}
-		}else{
+		    }else{
 			resultado_procesamiento=kStatus_Fail;
 			printf("ERROR\r\n");
-		}
-	break;
+		    }
+        	break;
 
 	default:
 		//para evitar bloqueos, si se le especifica un comando incorrecto, genera error
