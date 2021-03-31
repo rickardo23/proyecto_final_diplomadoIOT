@@ -1,20 +1,13 @@
+
 /*! @file : MCUX_FRDM_KL02Z_IoT_RTU_demo.c
  * @author  Ernesto Andres Rincon Cruz
  * @version 1.0.0
  * @date    8/01/2021
  * @brief   Funcion principal main
  * @details
- *			v0.1 dato recibido por puerto COM es contestado en forma de ECO
- *			v0.2 dato recibido por puerto COM realiza operaciones especiales
- *					A/a=invierte estado de LED conectado en PTB10
- *					v=apaga LED conectado en PTB7
- *					V=enciende LED conectado en PTB7
- *					r=apaga LED conectado en PTB6
- *			v0.3 nuevo comando por puerto serial para prueba de MMA8451Q
- *					M=detecta acelerometro MM8451Q en bus I2C0
- *
  *
  */
+
 /*******************************************************************************
  * Includes
  ******************************************************************************/
@@ -31,7 +24,6 @@
 #include "sdk_hal_i2c0.h"
 
 #include "sdk_mdlw_leds.h"
-#include "sdk_pph_mma8451Q.h"
 #include "sdk_pph_ec25au.h"
 /*******************************************************************************
  * Definitions
@@ -49,7 +41,7 @@
  * Local vars
  ******************************************************************************/
 
-uint8_t mensaje_de_texto[]="Hola desde EC25";
+uint8_t mensaje_de_texto[]="Hola desde EC25_dtk";
 
 /*******************************************************************************
  * Private Source Code
@@ -84,10 +76,6 @@ int main(void) {
     	return 0 ;
     }
 
-    //LLamado a funcion que indeitifica acelerometro MMA8451Q
-    if (mma8451QWhoAmI() == kStatus_Success){
-    	(void)mma8451QInit();	//inicializa acelerometro MMA8451Q
-    }
 
     //inicializa todas las funciones necesarias para trabajar con el modem EC25
     ec25Inicializacion();
