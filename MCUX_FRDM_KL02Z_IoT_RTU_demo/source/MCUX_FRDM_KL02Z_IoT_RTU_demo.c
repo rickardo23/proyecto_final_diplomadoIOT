@@ -158,10 +158,10 @@ int main(void) {
 
 #if HABILITAR_SENSOR_BME280
     	if(bme280_detectado==1){
-    		bme280_base_de_tiempo++;	                                        //incrementa base de tiempo para tomar dato bme280
-    		if(bme280_base_de_tiempo>10){	                                    //>10 equivale aproximadamente a 2s
-    			bme280_base_de_tiempo=0;                                        //reinicia contador de tiempo
-    			if(bme280ReadData(&bme280_datos)==kStatus_Success){         	//toma lectura humedad, presion, temperatura
+    		bme280_base_de_tiempo++;	                                   //incrementa base de tiempo para tomar dato bme280
+    		if(bme280_base_de_tiempo>10){	                               //>10 equivale aproximadamente a 2s
+    			bme280_base_de_tiempo=0;                                   //reinicia contador de tiempo
+    			if(bme280ReadData(&bme280_datos)==kStatus_Success){        //toma lectura humedad, presion, temperatura
 
     				temperatura = (float)bme280_datos.temperatura;
     				dato_temp = -45 + ((175*(temperatura))/65535);
@@ -173,10 +173,6 @@ int main(void) {
     				dato_pres = 100 * ((presion)/65535);
 
     				ec25sensor(dato_temp,dato_hum,dato_pres);
-
-    				printf("\t Temperatura :%d \r\n",valor_temperatura);    //imprime temperatura sin procesar
-        			printf("\t Humedad :%d \r\n",valor_humedad);	        //imprime humedad sin procesar
-        			printf("\t Presion :%d \r\n",valor_presion);	        //imprime presion sin procesar
 
         			printf("\t Temperatura :%d \r\n",bme280_datos.temperatura);
         			printf("\t Humedad :%d \r\n",bme280_datos.humedad);	        //imprime humedad sin procesar
