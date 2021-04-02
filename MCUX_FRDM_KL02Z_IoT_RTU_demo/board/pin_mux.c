@@ -13,6 +13,9 @@ package_id: MKL02Z32VFM4
 mcu_data: ksdk2_0
 processor_version: 8.0.1
 board: FRDM-KL02Z
+pin_labels:
+- {pin_num: '19', pin_signal: ADC0_SE3/PTA8/I2C1_SCL, label: 'J10[6]/ADC0_SE3/I2C1_SCL', identifier: EXT_SCL}
+- {pin_num: '20', pin_signal: ADC0_SE2/PTA9/I2C1_SDA, label: 'J10[5]/ADC0_SE2/I2C1_SDA', identifier: EXT_SDA}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -30,16 +33,17 @@ board: FRDM-KL02Z
  * END ****************************************************************************************************************/
 void BOARD_InitBootPins(void)
 {
-    BOARD_InitPins();
+    UART_InitPins();
     LED_InitPins();
     I2C_InitPins();
     MMA8451_InitPins();
+    ADC_InitPins();
 }
 
 /* clang-format off */
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-BOARD_InitPins:
+UART_InitPins:
 - options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
   - {pin_num: '17', peripheral: UART0, signal: TX, pin_signal: ADC0_SE5/CMP0_IN3/PTB1/IRQ_6/UART0_TX/UART0_RX}
@@ -50,20 +54,20 @@ BOARD_InitPins:
 
 /* FUNCTION ************************************************************************************************************
  *
- * Function Name : BOARD_InitPins
+ * Function Name : UART_InitPins
  * Description   : Configures pin routing and optionally pin electrical features.
  *
  * END ****************************************************************************************************************/
-void BOARD_InitPins(void)
+void UART_InitPins(void)
 {
     /* Port B Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortB);
 
     /* PORTB1 (pin 17) is configured as UART0_TX */
-    PORT_SetPinMux(BOARD_INITPINS_DEBUG_UART0_TX_PORT, BOARD_INITPINS_DEBUG_UART0_TX_PIN, kPORT_MuxAlt2);
+    PORT_SetPinMux(UART_INITPINS_DEBUG_UART0_TX_PORT, UART_INITPINS_DEBUG_UART0_TX_PIN, kPORT_MuxAlt2);
 
     /* PORTB2 (pin 18) is configured as UART0_RX */
-    PORT_SetPinMux(BOARD_INITPINS_DEBUG_UART0_RX_PORT, BOARD_INITPINS_DEBUG_UART0_RX_PIN, kPORT_MuxAlt2);
+    PORT_SetPinMux(UART_INITPINS_DEBUG_UART0_RX_PORT, UART_INITPINS_DEBUG_UART0_RX_PIN, kPORT_MuxAlt2);
 
     SIM->SOPT5 = ((SIM->SOPT5 &
                    /* Mask bits to zero which are setting */
@@ -139,6 +143,8 @@ I2C_InitPins:
 - pin_list:
   - {pin_num: '23', peripheral: I2C0, signal: SCL, pin_signal: PTB3/IRQ_10/I2C0_SCL/UART0_TX}
   - {pin_num: '24', peripheral: I2C0, signal: SDA, pin_signal: PTB4/IRQ_11/I2C0_SDA/UART0_RX}
+  - {pin_num: '20', peripheral: I2C1, signal: SDA, pin_signal: ADC0_SE2/PTA9/I2C1_SDA}
+  - {pin_num: '19', peripheral: I2C1, signal: SCL, pin_signal: ADC0_SE3/PTA8/I2C1_SCL}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -151,8 +157,16 @@ I2C_InitPins:
  * END ****************************************************************************************************************/
 void I2C_InitPins(void)
 {
+    /* Port A Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortA);
     /* Port B Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortB);
+
+    /* PORTA8 (pin 19) is configured as I2C1_SCL */
+    PORT_SetPinMux(I2C_INITPINS_EXT_SCL_PORT, I2C_INITPINS_EXT_SCL_PIN, kPORT_MuxAlt2);
+
+    /* PORTA9 (pin 20) is configured as I2C1_SDA */
+    PORT_SetPinMux(I2C_INITPINS_EXT_SDA_PORT, I2C_INITPINS_EXT_SDA_PIN, kPORT_MuxAlt2);
 
     /* PORTB3 (pin 23) is configured as I2C0_SCL */
     PORT_SetPinMux(I2C_INITPINS_ACCEL_SCL_PORT, I2C_INITPINS_ACCEL_SCL_PIN, kPORT_MuxAlt2);
@@ -200,6 +214,32 @@ void MMA8451_InitPins(void)
                                            kPORT_MuxAsGpio};
     /* PORTA10 (pin 21) is configured as PTA10 */
     PORT_SetPinConfig(MMA8451_INITPINS_ACCEL_IRQ_8_PORT, MMA8451_INITPINS_ACCEL_IRQ_8_PIN, &ACCEL_IRQ_8);
+}
+
+/* clang-format off */
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+ADC_InitPins:
+- options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: '11', peripheral: ADC0, signal: 'SE, 14', pin_signal: ADC0_SE11/PTB8}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+/* clang-format on */
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : ADC_InitPins
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ * END ****************************************************************************************************************/
+void ADC_InitPins(void)
+{
+    /* Port B Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortB);
+
+    /* PORTB8 (pin 11) is configured as ADC0_SE11 */
+    PORT_SetPinMux(PORTB, 8U, kPORT_PinDisabledOrAnalog);
 }
 /***********************************************************************************************************************
  * EOF
