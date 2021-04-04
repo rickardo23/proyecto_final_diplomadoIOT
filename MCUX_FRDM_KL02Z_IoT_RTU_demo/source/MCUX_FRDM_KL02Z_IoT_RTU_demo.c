@@ -84,9 +84,11 @@ void waytTime(void) {
 		tiempo--;
 	} while (tiempo != 0x0000);
 }
+
 /*
  * @brief   Application entry point.
  */
+
 int main(void) {
 
     uint8_t ec25_mensaje_de_texto[]="Hola desde EC25";
@@ -172,7 +174,7 @@ int main(void) {
     				presion = (float)bme280_datos.presion;
     				dato_pres = 100 * ((presion)/65535);
 
-    				ec25sensor(dato_temp,dato_hum,dato_pres);
+    				ec25sensor(dato_temp, dato_hum, dato_pres);
 
         			printf("\t Temperatura :%d \r\n",bme280_datos.temperatura);
         			printf("\t Humedad :%d \r\n",bme280_datos.humedad);	        //imprime humedad sin procesar

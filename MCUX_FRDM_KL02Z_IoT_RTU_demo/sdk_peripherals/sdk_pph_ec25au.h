@@ -92,7 +92,7 @@ enum _fsm_ec25_state{
  ******************************************************************************/
 status_t ec25Inicializacion(void);
 status_t ec25InicializarMQTT(void);
-status_t ec25sensor(float valor_temp, float valor_hum);
+status_t ec25sensor(float dato_temp, float dato_hum, float dato_pres);
 uint8_t ec25Polling(void);
 
 
