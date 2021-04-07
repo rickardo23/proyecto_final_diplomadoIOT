@@ -26,8 +26,9 @@
  * Public Definitions
  ******************************************************************************/
 #define BME280_ADDRESS  (0x76) //!< BME280 Dirección I2C.
-
-/*! @brief Listado de registros del sensor BME280 */
+/*!
+ * @brief Listado de registros del sensor BME280
+ */
 enum _bme280_registers{
 	BME280_REG_ID=0xD0,
 	BME280_REG_CTRL_HUM=0XF2,
@@ -47,11 +48,15 @@ enum _bme280_registers{
 /*!
  * @brief Define tipo de datos estructura que permite organizar los datos del sensor BM280
  */
-
 typedef struct _bme280_data{
 	uint32_t temperatura;
+	uint32_t TempMSB;
+	uint32_t TempLSB;
+	uint32_t TempXLSB;
 	uint32_t humedad;
 	uint32_t presion;
+	uint32_t status;
+	uint32_t config;
 }bme280_data_t;
 
 
@@ -106,4 +111,3 @@ status_t bme280Init(void);
 /** @} */ // end of X group
 
 #endif /* SDK_PPH_BME280_H_ */
-
