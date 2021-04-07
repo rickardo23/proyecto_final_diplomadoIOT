@@ -374,10 +374,10 @@ status_t ec25ProcesarRespuestaAT(uint8_t comando){
 				(char*) (ec25_repuestas_at[kAT_MQTT_MSJ_T_H])));
 
 		if(puntero_ok!=0x00){
-			printf("OK\r\n");
+			//printf("OK\r\n");
 			resultado_procesamiento=kStatus_Success;
 		}else{
-			printf("ERROR\r\n");
+			//printf("ERROR\r\n");
 			resultado_procesamiento=kStatus_Fail;
 		}
 		break;
@@ -490,7 +490,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_AT:
-		printf("Enviando AT:");
+		//printf("Enviando AT:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT);	                //Envia comando AT
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -499,7 +499,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_ATI:
-		printf("Enviando ATI:");
+		//printf("Enviando ATI:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kATI);	                //Envia comando ATI
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -508,7 +508,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_CPIN:
-		printf("Enviando CPIN?:");
+		//printf("Enviando CPIN?:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_CPIN);          	//Envia comando AT+CPIN?
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -517,7 +517,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_QCFG_CONFIG1:
-		printf("Enviando AT+QCFG=\"nwscanmode\",0,1:");
+		//printf("Enviando AT+QCFG=\"nwscanmode\",0,1:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_QCFG_CONFIG1);	    //Envia comando AT+QCFG="nwscanmode",0,1:"
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -526,7 +526,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_QCFG_CONFIG2:
-		printf("Enviando AT+QCFG=\"band\",0, 800005A,0:");
+		//printf("Enviando AT+QCFG=\"band\",0, 800005A,0:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_QCFG_CONFIG2);	    //Envia comando  AT+QCFG="band",0, 800005A,0:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -535,7 +535,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_QCSQ:
-		printf("Enviando AT+QCSQ:");
+		//printf("Enviando AT+QCSQ:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_QCSQ);              //Envia comando AT+CSQ:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -544,7 +544,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_CREG:
-		printf("Enviando AT+CREG:");
+		//printf("Enviando AT+CREG:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_CREG);	            //Envia comando AT+CREG:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -553,7 +553,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_CGREG:
-		printf("Enviando AT+CGREG:");
+		//printf("Enviando AT+CGREG:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_CGREG);	            //Envia comando AT+CGREG:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -562,7 +562,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_CEREG:
-		printf("Enviando AT+CEREG:");
+		//printf("Enviando AT+CEREG:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_CEREG);	            //Envia comando AT+CREG?
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -571,7 +571,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_CGDCONT:
-		printf("Enviando AT+CGDCONT=1,\"IP\",\"web.colombiamovil.com.co\":");
+		//printf("Enviando AT+CGDCONT=1,\"IP\",\"web.colombiamovil.com.co\":");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_CGDCONT);	        //Envia comando AT+CGDCONT=1,"IP","web.colombiamovil.com.co":
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -580,7 +580,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_QIACT_1:
-		printf("Enviando AT+QIACT=1:");
+		//printf("Enviando AT+QIACT=1:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_QIACT_1);	        //Envia comando AT+QIACT=1:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -589,7 +589,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_QIACT:
-		printf("Enviando AT+QIACT?:");
+		//printf("Enviando AT+QIACT?:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_QIACT);           	//Envia comando AT+QIACT?:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -598,7 +598,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_QMTOPEN:
-		printf("Enviando AT+QMTOPEN=0,\"20.55.202.62\",1883:");
+		//printf("Enviando AT+QMTOPEN=0,\"20.55.202.62\",1883:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_QMTOPEN);	        //Envia comando AT+QMTOPEN=0,"20.55.202.62",1883:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -607,7 +607,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_QMTCONN:
-		printf("Enviando AT+QMTCONN=0,\"modem\"[,\"guest\",\"guest\"]:");
+		//printf("Enviando AT+QMTCONN=0,\"modem\"[,\"guest\",\"guest\"]:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_QMTCONN);	        //Envia comando AT+QMTCONN=0,"modem"[,"guest","guest"]:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -616,7 +616,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_QMTPUB_T_H:
-		printf("Enviando AT+QMTPUB=0,1,1,0,\"1/temperatura\":");
+		//printf("Enviando AT+QMTPUB=0,1,1,0,\"1/temperatura\":");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_QMTPUB_T_H);        //ec25EnviarComandoATMQTT(kAT_QMTPUB_TEMP);
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual
@@ -625,7 +625,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_MQTT_MSJ_T_H:
-		printf("Enviando temperatura:");
+		//printf("Enviando temperatura:");
 		ec25EnviarMensajeMQTT();
 		//printf("%s\r\n%c", ec25_buffer_tx,0x1A);	//Envia mensaje de texto incluido  CTRL+Z (0x1A)
 		//ec25EnviarComandoATMQTT(kAT_MQTT_MSJ_TEMP);
@@ -636,7 +636,7 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_ENVIANDO_CSQ:
-		printf("Enviando AT+CSQ:");
+		//printf("Enviando AT+CSQ:");
 		ec25BorrarBufferRX();	                    //limpia buffer para recibir datos de quectel
 		ec25EnviarComandoAT(kAT_CSQ);               //Envia comando AT+CSQ:
 		ec25_fsm.anterior = ec25_fsm.actual;		//almacena el estado actual

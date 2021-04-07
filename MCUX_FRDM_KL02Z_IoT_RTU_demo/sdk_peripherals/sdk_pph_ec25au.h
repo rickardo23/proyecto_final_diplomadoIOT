@@ -75,7 +75,7 @@ enum _fsm_ec25_state{
 	kFSM_RESULTADO_ERROR_QMTPUB_T_H,
 };
 
-#define EC25_TIEMPO_MAXIMO_ESPERA	5		//Tiempo maximo que espera modem por respuesta
+#define EC25_TIEMPO_MAXIMO_ESPERA	7		//Tiempo maximo que espera modem por respuesta
 #define EC25_RSSI_MINIMO_ACEPTADO	12		//RSSI minimo aceptado segun tabla del fabricante
 
 
