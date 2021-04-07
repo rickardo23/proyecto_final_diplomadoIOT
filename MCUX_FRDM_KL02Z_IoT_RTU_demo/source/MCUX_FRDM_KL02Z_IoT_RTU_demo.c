@@ -1,22 +1,12 @@
 
-/*! @file : MCUX_FRDM_KL02Z_IoT_RTU_demo.c
- * @author  Ernesto Andres Rincon Cruz
- * @version 1.0.0
- * @date    8/01/2021
- * @brief   Funcion principal main
- * @details
- *			v0.1 dato recibido por puerto COM es contestado en forma de ECO
- *			v0.2 dato recibido por puerto COM realiza operaciones especiales
- *					A/a=invierte estado de LED conectado en PTB10
- *					v=apaga LED conectado en PTB7
- *					V=enciende LED conectado en PTB7
- *					r=apaga LED conectado en PTB6
- *			v0.3 nuevo comando por puerto serial para prueba de MMA8451Q
- *					M=detecta acelerometro MM8451Q en bus I2C0
- */
-
 /*
-    En caso de la macro "BME280 FLOAT ENABLE" habilitada, las salidas son dobles y las unidades son
+  @file : MCUX_FRDM_KL02Z_IoT_RTU_demo.c
+  @author  Ernesto Andres Rincon Cruz
+  @version 1.0.0
+  @date    8/01/2021
+  @brief   Funcion principal main
+  @details
+
       -° C para temperatura
       -% humedad relativa
       -Pa Pascal para presión
@@ -40,11 +30,12 @@
 #include "sdk_mdlw_leds.h"
 #include "sdk_pph_ec25au.h"
 #include "sdk_pph_bme280.h"
-#include "sdk_pph_bme280_defs.h"
+
 
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+/*
 #define  BME280_I2C_config        0xF5   //registro para configurar el BME280
 #define  BME280_I2C_ID		      0xD0   //registro para identificar al sensor, El valor de lectura es 0x60
 
@@ -56,6 +47,7 @@
 #define BME280_press_xlsb       0xF9
 #define BME280_press_lsb        0xF8    //registros para leer los datos (8 bits) de  la presion de MSB y LSB.
 #define BME280_press_msb        0xF7
+*/
 
 #define HABILITAR_MODEM_EC25		1
 #define HABILITAR_SENSOR_BME280		1
@@ -85,16 +77,12 @@ void waytTime(void) {
 	} while (tiempo != 0x0000);
 }
 
-/*
- * @brief   Application entry point.
- */
 
 int main(void) {
 
     uint8_t ec25_mensaje_de_texto[]="Hola desde EC25";
 	uint8_t estado_actual_ec25;
     uint8_t ec25_detectado=0;
-
 
 	bme280_data_t bme280_datos;
 	uint8_t bme280_detectado=0;
@@ -106,7 +94,6 @@ int main(void) {
 	float dato_hum;
 	float presion;
 	float dato_pres;
-
 
     //inicializa el hardware de la tarjeta
     BOARD_InitBootPins();
@@ -159,33 +146,29 @@ int main(void) {
     	waytTime();		//base de tiempo fija aproximadamente 200ms
 
 #if HABILITAR_SENSOR_BME280
-    	if(bme280_detectado==1){
-    		bme280_base_de_tiempo++;	                                   //incrementa base de tiempo para tomar dato bme280
-    		if(bme280_base_de_tiempo>10){	                               //>10 equivale aproximadamente a 2s
-    			bme280_base_de_tiempo=0;                                   //reinicia contador de tiempo
-    			if(bme280ReadData(&bme280_datos)==kStatus_Success){        //toma lectura humedad, presion, temperatura
+   if(bme280_detectado==1){
+      bme280_base_de_tiempo++;	                                      //incrementa base de tiempo para tomar dato bme280
+    	if(bme280_base_de_tiempo>10){	                              //>10 equivale aproximadamente a 2s
+    	   bme280_base_de_tiempo=0;                                   //reinicia contador de tiempo
+    	   	 if(bme280ReadData(&bme280_datos)==kStatus_Success){      //toma lectura humedad, presion, temperatura
 
-    				temperatura = (float)bme280_datos.temperatura;
-    				dato_temp = -45 + ((175*(temperatura))/65535);
+    			temperatura = (float)bme280_datos.temperatura;   //Conversión de la variable temperatura en entero a flotante
+    			dato_temp = -62 + ((175*(temperatura))/1048575); //Ajustes de los valores arrojados por el sensor por medio del tanteo y error
 
-    				humedad = (float)bme280_datos.humedad;
-    				dato_hum = 100 * ((humedad)/65535);
+    			humedad = (float)bme280_datos.humedad;           //Conversión de la variable humedad en entero a flotante
+    			dato_hum  = (100 * ((humedad)/65536)) - 12;      //Ajustes de los valores arrojados por el sensor por medio del tanteo y error
 
-    				presion = (float)bme280_datos.presion;
-    				dato_pres = 100 * ((presion)/65535);
+   				presion = (float)bme280_datos.presion;                   //Conversión de la variable presion en entero a flotante
+   				dato_pres = (((1100-300)*(presion/1048576))*4) + 33.61;  //Ajustes de los valores arrojados por el sensor por medio del tanteo y error
 
-    				ec25sensor(dato_temp, dato_hum, dato_pres);
+    			ec25sensor(dato_temp, dato_hum, dato_pres);  //funcion para
 
-        			printf("\t Temperatura :%d \r\n",bme280_datos.temperatura);
-        			printf("\t Humedad :%d \r\n",bme280_datos.humedad);	        //imprime humedad sin procesar
-        			printf("\t Presion :%d \r\n",bme280_datos.presion);
-        			/*
-    				printf("-> BME280 Sensor \r\n");
-    				printf("\t Temperatura :%d \r\n",bme280_datos.temperatura); //imprime temperatura sin procesar
-        			printf("\t Humedad :%d \r\n",bme280_datos.humedad);	        //imprime humedad sin procesar
-        			printf("\t Presion :%d \r\n",bme280_datos.presion);	        //imprime presion sin procesar
-        			printf("\r\n");	                                            //Imprime cambio de linea
-                    */
+    		  printf("-> BME280 Sensor \r\n");
+    	      printf("\t Temperatura \"(°C)\":%.2f \r\n",dato_temp);    //imprime temperatura en grados celsius
+   			  printf("\t Humedad (porcentaje):%.2f \r\n",dato_hum);	    //imprime humedad en %
+        	  printf("\t Presion (mbar) :%.2f \r\n",dato_pres);	        //imprime presion mili bar
+        	  printf("\r\n");	                                        //Imprime un cambio de linea
+
         			//sprintf((char*)(&ec25_mensaje_de_texto[0]),"Temperatura :%d \r\n",bme280_datos.temperatura);
         			//sprintf((char*)(&ec25_mensaje_de_texto[1]),"Humedad :%d \r\n",bme280_datos.humedad);
         			//sprintf((char*)(&ec25_mensaje_de_texto[2]),"Presion :%d \r\n",bme280_datos.presion);
